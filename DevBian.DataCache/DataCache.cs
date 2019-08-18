@@ -7,6 +7,10 @@ using System.Web.Caching;
 
 namespace DevBian
 {
+  /// <summary>
+  /// Тип хранения объектов в кэше, без ограничения по времени, абсолютное кэширование на заданное время, 
+  /// скользящее кэширование на заданное время.
+  /// </summary>
   public enum DataCacheExpirationType
   {
     NoExpiration,
@@ -22,12 +26,12 @@ namespace DevBian
     public static bool IsCacheEnable { get; set; } = true;
 
     /// <summary>
-    /// 
+    /// Тип хранения объектов в кэше
     /// </summary>
     public static DataCacheExpirationType ExpirationType { get; set; } = DataCacheExpirationType.SlidingExpiration;
 
     /// <summary>
-    /// 
+    /// Время хранения объектов в кэше
     /// </summary>
     public static TimeSpan ExpirationTime { get; set; } = TimeSpan.FromMinutes(20);
 
@@ -131,6 +135,28 @@ namespace DevBian
           cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
         else if (DataCache.ExpirationType == DataCacheExpirationType.AbsoluteExpiration)
           cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
+        else
+          cache.Insert(cacheName, cacheValue);
+      }
+    }
+
+    /// <summary>
+    /// Добавляет объект в глобальный кэш приложений перекрывая параметры хранения по умолчанию.
+    /// Если объект по такому имени уже существует, то он будет переписан новым значением.
+    /// </summary>
+    /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
+    /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
+    /// <param name="expirationType">Тип хранения объекта в кэше</param>
+    /// <param name="expirationTime">Время хранения объекта в кэше</param>
+    public static void InsertData(string cacheName, object cacheValue, DataCacheExpirationType expirationType, TimeSpan expirationTime)
+    {
+      var cache = DataCache.GetCache();
+      if (cache != null)
+      {
+        if (expirationType == DataCacheExpirationType.SlidingExpiration)
+          cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, expirationTime);
+        else if (expirationType == DataCacheExpirationType.AbsoluteExpiration)
+          cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
         else
           cache.Insert(cacheName, cacheValue);
       }
