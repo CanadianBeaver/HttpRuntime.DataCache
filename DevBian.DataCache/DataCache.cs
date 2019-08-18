@@ -7,130 +7,164 @@ using System.Web.Caching;
 
 namespace DevBian
 {
-	public static class DataCache
-	{
-		/// <summary>
-		/// Признак использования кэша для хранения данных
-		/// </summary>
-		public static bool IsCacheEnable { get; set; } = true;
+  public enum DataCacheExpirationType
+  {
+    NoExpiration,
+    AbsoluteExpiration,
+    SlidingExpiration
+  }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public static DateTime AbsoluteExpiration { get; set; } = Cache.NoAbsoluteExpiration;
+  public static class DataCache
+  {
+    /// <summary>
+    /// Признак использования кэша для хранения данных
+    /// </summary>
+    public static bool IsCacheEnable { get; set; } = true;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public static TimeSpan SlidingExpiration { get; set; } = Cache.NoSlidingExpiration;
+    /// <summary>
+    /// 
+    /// </summary>
+    public static DataCacheExpirationType ExpirationType { get; set; } = DataCacheExpirationType.SlidingExpiration;
 
-		/// <summary>
-		/// Возврашает ссылку на объект ASP.NET кэша, если кэширование разрешено.
-		/// При запрещении ведения кэша, всегда возврашает null.
-		/// </summary>
-		private static Cache Cache
-		{
-			get
-			{
-				if (DataCache.IsCacheEnable) return HttpRuntime.Cache;
-				return null;
-			}
-		}
+    /// <summary>
+    /// 
+    /// </summary>
+    public static TimeSpan ExpirationTime { get; set; } = TimeSpan.FromMinutes(20);
 
-		/// <summary>
-		/// Возвращает типизированный объект из глобального кэша приложений по уникальному имени
-		/// </summary>
-		/// <typeparam name="T">Тип возвращаемого объекта</typeparam>
-		/// <param name="CacheName">Имя объекта в кэше</param>
-		/// <param name="DefaultResult"></param>
-		/// <returns>Извлеченный объект, или DefaultResult - если в кэше указанного объекта не обнаружено</returns>
-		public static T GetData<T>(string CacheName, T DefaultResult = default(T))
-		{
-			Cache cache = DataCache.Cache;
-			if (cache != null)
-			{
-				object result = cache.Get(CacheName);
-				if (result is T) return (T)result;
-				else if (result == null) return DefaultResult;
-				else
-					try
-					{
-						return (T)Convert.ChangeType(result, typeof(T));
-					}
-					catch
-					{
-						return DefaultResult;
-					}
-			}
-			return DefaultResult;
-		}
+    /// <summary>
+    /// Возврашает ссылку на объект ASP.NET кэша, если кэширование разрешено.
+    /// При запрещении ведения кэша, всегда возврашает null.
+    /// </summary>
+    private static Cache GetCache()
+    {
+      if (DataCache.IsCacheEnable) return HttpRuntime.Cache;
+      return null;
+    }
 
-		/// <summary>
-		/// Добавляет объект в глобальный кэш приложений.
-		/// Если объект по такому имени уже существует, то он будет переписан новым значением.
-		/// </summary>
-		/// <param name="CacheName">Имя добавляемого объекта в кэше</param>
-		/// <param name="CacheValue">Значение добавляемого объекта в кэше</param>
-		public static void InsertData(string CacheName, object CacheValue, CacheDependency Dependency = null, DateTime? AbsoluteExpiration = null, TimeSpan? SlidingExpiration = null)
-		{
-			Cache cache = DataCache.Cache;
-			if (cache != null)
-			{
-				if (AbsoluteExpiration.HasValue)
-					cache.Insert(CacheName, CacheValue, Dependency, AbsoluteExpiration.Value, Cache.NoSlidingExpiration);
-				else if (SlidingExpiration.HasValue)
-					cache.Insert(CacheName, CacheValue, Dependency, Cache.NoAbsoluteExpiration, SlidingExpiration.Value);
-				else
-					cache.Insert(CacheName, CacheValue, Dependency, DataCache.AbsoluteExpiration, DataCache.SlidingExpiration);
-			}
-		}
+    /// <summary>
+    /// Возвращает типизированный объект из глобального кэша приложений по уникальному имени
+    /// </summary>
+    /// <typeparam name="T">Тип возвращаемого объекта</typeparam>
+    /// <param name="cacheName">Имя объекта в кэше</param>
+    /// <param name="defaultResult">Значение, возвращаемое по умолчанию, если запрашиваемого объекта нет в кэше</param>
+    /// <returns>Извлеченный объект, или <paramref name="defaultResult"/> - если в кэше указанного объекта не обнаружено</returns>
+    public static T GetData<T>(string cacheName, T defaultResult = default(T))
+    {
+      var cache = DataCache.GetCache();
+      if (cache != null)
+      {
+        object result = cache.Get(cacheName);
+        if (result is T) return (T)result;
+        else if (result == null) return defaultResult;
+        else
+          try
+          {
+            return (T)Convert.ChangeType(result, typeof(T));
+          }
+          catch
+          {
+            return defaultResult;
+          }
+      }
+      return defaultResult;
+    }
 
-		/// <summary>
-		/// Удаляет объект из глобального кэша приложений по уникальному имени
-		/// </summary>
-		/// <param name="CacheName">Имя объекта в кэше</param>
-		public static void RemoveData(string CacheName)
-		{
-			Cache cache = DataCache.Cache;
-			if (cache != null) cache.Remove(CacheName);
-		}
+    /// <summary>
+    /// Создаёт новый типизированный объект и заполняет его свойтсвами объекта из кэша. 
+    /// Идентичен методу <seealso cref="GetData{T}(string, T)"/>, но вместо возращение объекта из кэша 
+    /// дублирует его значения в новом объекте.
+    /// </summary>
+    /// <typeparam name="T">Тип возвращаемого объекта</typeparam>
+    /// <param name="cacheName">Имя объекта в кэше</param>
+    /// <param name="defaultResult">Значение, возвращаемое по умолчанию, если запрашиваемого объекта нет в кэше</param>
+    /// <returns>Извлеченный объект, или <paramref name="defaultResult"/> - если в кэше указанного объекта не обнаружено</returns>
+    public static T GetDeepCopiedData<T>(string cacheName, T defaultResult = default(T))
+    {
+      var cache = DataCache.GetCache();
+      if (cache != null)
+      {
+        object result = cache.Get(cacheName);
+        if (result is T) return DataCache.DeepCopy<T>((T)result);
+        else if (result == null) return defaultResult;
+        else
+          try
+          {
+            return DataCache.DeepCopy<T>((T)Convert.ChangeType(result, typeof(T)));
+          }
+          catch
+          {
+            return defaultResult;
+          }
+      }
+      return defaultResult;
+    }
 
-		/// <summary>
-		/// Удаляет объекты из глобального кэша приложений по частичному совпадению имени.
-		/// Удаляются все объекты, имена которых начинаются с указанного значения.
-		/// </summary>
-		/// <param name="CacheNameStart">Частичное имя объекта в кэше</param>
-		public static void RemoveAllData(string CacheNameStart)
-		{
-			Cache cache = DataCache.Cache;
-			if (cache != null)
-			{
-				IDictionaryEnumerator eCache = cache.GetEnumerator();
-				while (eCache.MoveNext())
-				{
-					string key = eCache.Key as string;
-					if (!string.IsNullOrEmpty(key) && key.StartsWith(CacheNameStart))
-						cache.Remove(key);
-				}
-			}
-		}
+    /// <summary>
+    /// Дублирует объект для отвязки от кэша используя побайтное копирование
+    /// </summary>
+    /// <typeparam name="T">Тип возвращаемого объекта</typeparam>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    private static T DeepCopy<T>(T obj)
+    {
+      using (var ms = new MemoryStream())
+      {
+        var bf = new BinaryFormatter();
+        bf.Serialize(ms, obj);
+        ms.Seek(0, SeekOrigin.Begin);
+        return (T)bf.Deserialize(ms);
+      }
+    }
 
-		/// <summary>
-		/// Дублирует объект для отвязки от кэша
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="obj"></param>
-		/// <returns></returns>
-		public static T DeepCopy<T>(T obj)
-		{
-			using (var ms = new MemoryStream())
-			{
-				var bf = new BinaryFormatter();
-				bf.Serialize(ms, obj);
-				ms.Seek(0, SeekOrigin.Begin);
-				return (T)bf.Deserialize(ms);
-			}
-		}
+    /// <summary>
+    /// Добавляет объект в глобальный кэш приложений.
+    /// Если объект по такому имени уже существует, то он будет переписан новым значением.
+    /// </summary>
+    /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
+    /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
+    public static void InsertData(string cacheName, object cacheValue)
+    {
+      var cache = DataCache.GetCache();
+      if (cache != null)
+      {
+        if (DataCache.ExpirationType == DataCacheExpirationType.SlidingExpiration)
+          cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
+        else if (DataCache.ExpirationType == DataCacheExpirationType.AbsoluteExpiration)
+          cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
+        else
+          cache.Insert(cacheName, cacheValue);
+      }
+    }
 
-	}
+    /// <summary>
+    /// Удаляет объект из глобального кэша приложений по уникальному имени
+    /// </summary>
+    /// <param name="cacheName">Имя объекта в кэше</param>
+    public static void RemoveData(string cacheName)
+    {
+      var cache = DataCache.GetCache();
+      if (cache != null) cache.Remove(cacheName);
+    }
+
+    /// <summary>
+    /// Удаляет объекты из глобального кэша приложений по частичному совпадению имени.
+    /// Удаляются все объекты, имена которых начинаются с указанного значения.
+    /// </summary>
+    /// <param name="cacheNameStart">Частичное имя объекта в кэше</param>
+    public static void RemoveAllData(string cacheNameStart)
+    {
+      var cache = DataCache.GetCache();
+      if (cache != null)
+      {
+        IDictionaryEnumerator eCache = cache.GetEnumerator();
+        while (eCache.MoveNext())
+        {
+          string key = eCache.Key as string;
+          if (!string.IsNullOrEmpty(key) && key.StartsWith(cacheNameStart))
+            cache.Remove(key);
+        }
+      }
+    }
+
+  }
 }

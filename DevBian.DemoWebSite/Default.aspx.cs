@@ -33,7 +33,7 @@ namespace DevBian.DemoWebSite
 			}
 			else if (Request.Form["button2"] != null)
 			{
-				SomethingDataModel val = DataCache.DeepCopy(DataCache.GetData<SomethingDataModel>(STR_CACHENAME));
+				SomethingDataModel val = DataCache.GetDeepCopiedData<SomethingDataModel>(STR_CACHENAME);
 				val.ID++;
 				this.label1.Text = DataCache.GetData<SomethingDataModel>(STR_CACHENAME).ToString();
 			}
