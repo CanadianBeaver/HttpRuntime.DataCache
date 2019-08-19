@@ -1,20 +1,25 @@
 ﻿using System;
-using System.Collections;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Web;
-using System.Web.Caching;
 
 namespace DevBian
 {
   /// <summary>
-  /// Тип хранения объектов в кэше, без ограничения по времени, абсолютное кэширование на заданное время, 
-  /// скользящее кэширование на заданное время.
+  /// Тип хранения объектов в кэше
   /// </summary>
   public enum DataCacheExpirationType
   {
+    /// <summary>
+    /// Без ограничения по времени, значение свойства <seealso cref="DataCache.ExpirationTime"/> будет проигнорировано
+    /// </summary>
     NoExpiration,
+
+    /// <summary>
+    /// Абсолютное кэширование на заданное время в свойстве <seealso cref="DataCache.ExpirationTime"/>
+    /// </summary>
     AbsoluteExpiration,
+
+    /// <summary>
+    /// Скользящее кэширование на заданное время в свойстве <seealso cref="DataCache.ExpirationTime"/>
+    /// </summary>
     SlidingExpiration
   }
 }
