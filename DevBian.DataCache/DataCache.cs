@@ -120,7 +120,7 @@ namespace DevBian
     }
 
     /// <summary>
-    /// Добавляет объект в глобальный кэш приложений.
+    /// Добавляет объект в глобальный кэш приложений используя параметры кэширования заданные по умолчнию.
     /// Если объект по такому имени уже существует, то он будет переписан новым значением.
     /// </summary>
     /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
@@ -140,24 +140,34 @@ namespace DevBian
     }
 
     /// <summary>
-    /// Добавляет объект в глобальный кэш приложений перекрывая параметры хранения по умолчанию.
+    /// Добавляет объект в глобальный кэш приложений с абсолютным кэшированием на заданное время.
     /// Если объект по такому имени уже существует, то он будет переписан новым значением.
     /// </summary>
     /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
     /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
-    /// <param name="expirationType">Тип хранения объекта в кэше</param>
     /// <param name="expirationTime">Время хранения объекта в кэше</param>
-    public static void InsertData(string cacheName, object cacheValue, DataCacheExpirationType expirationType, TimeSpan expirationTime)
+    public static void InsertAbsoluteExpirationData(string cacheName, object cacheValue, TimeSpan expirationTime)
     {
       var cache = DataCache.GetCache();
       if (cache != null)
       {
-        if (expirationType == DataCacheExpirationType.SlidingExpiration)
-          cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, expirationTime);
-        else if (expirationType == DataCacheExpirationType.AbsoluteExpiration)
-          cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
-        else
-          cache.Insert(cacheName, cacheValue);
+        cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
+      }
+    }
+
+    /// <summary>
+    /// Добавляет объект в глобальный кэш приложений со скользящим кэшированием на заданное время.
+    /// Если объект по такому имени уже существует, то он будет переписан новым значением.
+    /// </summary>
+    /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
+    /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
+    /// <param name="expirationTime">Время хранения объекта в кэше</param>
+    public static void InsertSlidingExpirationData(string cacheName, object cacheValue, TimeSpan expirationTime)
+    {
+      var cache = DataCache.GetCache();
+      if (cache != null)
+      {
+        cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, expirationTime);
       }
     }
 
