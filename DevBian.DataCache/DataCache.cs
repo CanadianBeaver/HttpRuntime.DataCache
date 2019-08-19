@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
 using System.Web.Caching;
 
-namespace DevBian
+namespace DevBian.Caching
 {
   public static class DataCache
   {
@@ -17,7 +17,7 @@ namespace DevBian
     /// <summary>
     /// Тип хранения объектов в кэше
     /// </summary>
-    public static DataCacheExpirationType ExpirationType;
+    public static CacheExpirationType ExpirationType;
 
     /// <summary>
     /// Время хранения объектов в кэше
@@ -30,7 +30,7 @@ namespace DevBian
     static DataCache()
     {
       DataCache.IsCacheEnable = true;
-      DataCache.ExpirationType = DataCacheExpirationType.SlidingExpiration;
+      DataCache.ExpirationType = CacheExpirationType.SlidingExpiration;
       DataCache.ExpirationTime = TimeSpan.FromMinutes(20);
     }
 
@@ -117,9 +117,9 @@ namespace DevBian
     {
       if (DataCache.IsCacheEnable)
       {
-        if (DataCache.ExpirationType == DataCacheExpirationType.SlidingExpiration)
+        if (DataCache.ExpirationType == CacheExpirationType.SlidingExpiration)
           HttpRuntime.Cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
-        else if (DataCache.ExpirationType == DataCacheExpirationType.AbsoluteExpiration)
+        else if (DataCache.ExpirationType == CacheExpirationType.AbsoluteExpiration)
           HttpRuntime.Cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
         else
           HttpRuntime.Cache.Insert(cacheName, cacheValue);

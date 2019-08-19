@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace DevBian
+namespace DevBian.Caching
 {
   /// <summary>
   /// Тип хранения объектов в кэше
   /// </summary>
-  public enum DataCacheExpirationType
+  public enum CacheExpirationType
   {
     /// <summary>
     /// Без ограничения по времени, значение свойства <seealso cref="DataCache.ExpirationTime"/> будет проигнорировано

@@ -7,7 +7,7 @@
     <ProjectGuid>{67647E3F-A6E9-49C7-A72B-C401492E7FBC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DevBian</RootNamespace>
+    <RootNamespace>DevBian.Caching</RootNamespace>
     <AssemblyName>DevBian.DataCache</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
