@@ -42,17 +42,35 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PopulateCacheButton.ascx" />
+    <Content Include="ClearCacheButton.ascx" />
     <Content Include="Default.aspx" />
     <Content Include="DisplayCache.ascx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PopulateCacheButton.ascx.cs">
+      <DependentUpon>PopulateCacheButton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PopulateCacheButton.ascx.designer.cs">
+      <DependentUpon>PopulateCacheButton.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ClearCacheButton.ascx.cs">
+      <DependentUpon>ClearCacheButton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClearCacheButton.ascx.designer.cs">
+      <DependentUpon>ClearCacheButton.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

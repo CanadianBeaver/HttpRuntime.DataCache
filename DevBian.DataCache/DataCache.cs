@@ -175,7 +175,7 @@ namespace DevBian.Caching
           HttpRuntime.Cache.Insert(cacheName, cacheValue);
       }
     }
-    
+
     /// <summary>
     /// Добавляет объект в глобальный кэш приложений с заданными параметрами кэширования.
     /// Если объект по такому имени уже существует, то он будет переписан новым значением.
@@ -206,6 +206,22 @@ namespace DevBian.Caching
       if (DataCache.IsCacheEnable)
       {
         HttpRuntime.Cache.Remove(cacheName);
+      }
+    }
+
+    /// <summary>
+    /// Удаляет все объекты из глобального кэша приложений.
+    /// </summary>
+    public static void RemoveAllData()
+    {
+      if (DataCache.IsCacheEnable)
+      {
+        IDictionaryEnumerator eCache = HttpRuntime.Cache.GetEnumerator();
+        while (eCache.MoveNext())
+        {
+          string key = eCache.Key as string;
+          HttpRuntime.Cache.Remove(key);
+        }
       }
     }
 
