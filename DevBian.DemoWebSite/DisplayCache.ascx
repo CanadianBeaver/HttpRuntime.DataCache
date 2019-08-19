@@ -6,7 +6,8 @@
             <table>
                 <tr>
                     <th>&nbsp;</th>
-                    <th>Name</th>
+                    <th>Key</th>
+                    <th>Type</th>
                     <th>Value</th>
                 </tr>
         </HeaderTemplate>
@@ -15,6 +16,7 @@
             <tr>
                 <td><%# DataBinder.Eval(Container.DataItem, "Index") %></td>
                 <td><%# DataBinder.Eval(Container.DataItem, "Key") %></td>
+                <td><%# DataBinder.Eval(Container.DataItem, "Type") %></td>
                 <td><%# DataBinder.Eval(Container.DataItem, "Value") %></td>
             </tr>
         </ItemTemplate>

@@ -22,8 +22,9 @@ namespace DevBian.DemoWebSite
         {
           index++;
           string key = eCache.Key as string;
+          string type = eCache.Value.GetType().ToString();
           string value = eCache.Value.ToString();
-          result.Add(new { Index = index, Key = key, Value = value });
+          result.Add(new { Index = index, Key = key, Type = type, Value = value });
         }
         this.repItems.DataSource = result;
         this.repItems.DataBind();
