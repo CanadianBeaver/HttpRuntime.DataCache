@@ -36,10 +36,25 @@ namespace DevBian.Caching.Tests
     }
 
     [TestMethod()]
-    [Ignore("Not implemented")]
     public void GetDeepCopiedDataTest()
     {
-      Assert.Fail();
+      // Arrange
+      var result = new List<string>() { "1", "2", "3" };
+      DataCache.InsertData("a", result);
+
+      // Act
+      result = DataCache.GetData<List<string>>("a");
+      result.Add("4");
+
+      // Assert
+      Assert.AreEqual(4, DataCache.GetData<List<string>>("a").Count);
+
+      // Act
+      result = DataCache.GetDeepCopiedData<List<string>>("a");
+      result.Add("5");
+
+      // Assert
+      Assert.AreEqual(4, DataCache.GetData<List<string>>("a").Count);
     }
 
     [TestMethod()]
@@ -136,17 +151,33 @@ namespace DevBian.Caching.Tests
     }
 
     [TestMethod()]
-    [Ignore("Not implemented")]
     public void InsertExpirationDataTest()
     {
-      Assert.Fail();
+      // Arrange
+      DataCache.InsertExpirationData("ddd1", 0, CacheExpirationType.NoExpiration);
+      DataCache.InsertExpirationData("ddd2", 0, CacheExpirationType.AbsoluteExpiration);
+      DataCache.InsertExpirationData("ddd3", 0, CacheExpirationType.SlidingExpiration);
+      DataCache.InsertData("ddd4", 0);
+      DataCache.InsertData("sss", 0);
+      DataCache.InsertData("aaa", 0);
+
+      // Assert
+      Assert.AreEqual(HttpRuntime.Cache.Count, 6);
     }
 
     [TestMethod()]
-    [Ignore("Not implemented")]
-    public void InsertExpirationDataTest1()
+    public void InsertExpirationDataTimeTest()
     {
-      Assert.Fail();
+      // Arrange
+      DataCache.InsertExpirationData("ddd1", 0, CacheExpirationType.NoExpiration, TimeSpan.FromSeconds(5));
+      DataCache.InsertExpirationData("ddd2", 0, CacheExpirationType.AbsoluteExpiration, TimeSpan.FromSeconds(5));
+      DataCache.InsertExpirationData("ddd3", 0, CacheExpirationType.SlidingExpiration, TimeSpan.FromSeconds(5));
+      DataCache.InsertData("ddd4", 0);
+      DataCache.InsertData("sss", 0);
+      DataCache.InsertData("aaa", 0);
+
+      // Assert
+      Assert.AreEqual(HttpRuntime.Cache.Count, 6);
     }
 
     [TestMethod()]
