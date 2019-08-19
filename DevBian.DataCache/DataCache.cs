@@ -7,33 +7,32 @@ using System.Web.Caching;
 
 namespace DevBian
 {
-  /// <summary>
-  /// Тип хранения объектов в кэше, без ограничения по времени, абсолютное кэширование на заданное время, 
-  /// скользящее кэширование на заданное время.
-  /// </summary>
-  public enum DataCacheExpirationType
-  {
-    NoExpiration,
-    AbsoluteExpiration,
-    SlidingExpiration
-  }
-
   public static class DataCache
   {
     /// <summary>
     /// Признак использования кэша для хранения данных
     /// </summary>
-    public static bool IsCacheEnable { get; set; } = true;
+    public static bool IsCacheEnable;
 
     /// <summary>
     /// Тип хранения объектов в кэше
     /// </summary>
-    public static DataCacheExpirationType ExpirationType { get; set; } = DataCacheExpirationType.SlidingExpiration;
+    public static DataCacheExpirationType ExpirationType;
 
     /// <summary>
     /// Время хранения объектов в кэше
     /// </summary>
-    public static TimeSpan ExpirationTime { get; set; } = TimeSpan.FromMinutes(20);
+    public static TimeSpan ExpirationTime;
+
+    /// <summary>
+    /// Статический конструктор инициализирует начальные значения свойств класса
+    /// </summary>
+    static DataCache()
+    {
+      DataCache.IsCacheEnable = true;
+      DataCache.ExpirationType = DataCacheExpirationType.SlidingExpiration;
+      DataCache.ExpirationTime = TimeSpan.FromMinutes(20);
+    }
 
     /// <summary>
     /// Возврашает ссылку на объект ASP.NET кэша, если кэширование разрешено.
