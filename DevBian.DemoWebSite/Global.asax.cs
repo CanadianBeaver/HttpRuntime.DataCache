@@ -1,47 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Security;
-using System.Web.SessionState;
+﻿using DevBian.Caching;
+
+using System;
 
 namespace DevBian.DemoWebSite
 {
-	public class Global : System.Web.HttpApplication
-	{
-
-		protected void Application_Start(object sender, EventArgs e)
-		{
-			// DataCache.IsCacheEnable = true;
-		}
-
-		protected void Session_Start(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_BeginRequest(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_AuthenticateRequest(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_Error(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Session_End(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_End(object sender, EventArgs e)
-		{
-
-		}
-	}
+  public class Global : System.Web.HttpApplication
+  {
+    protected void Application_Start(object sender, EventArgs e)
+    {
+      var settings = Properties.Settings.Default;
+      DataCache.IsCacheEnable = settings.IsCacheEnable;
+      DataCache.ExpirationType = settings.ExpirationType;
+      DataCache.ExpirationTime = settings.ExpirationTime;
+    }
+  }
 }
