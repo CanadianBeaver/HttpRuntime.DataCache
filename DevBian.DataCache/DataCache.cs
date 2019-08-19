@@ -35,16 +35,6 @@ namespace DevBian
     }
 
     /// <summary>
-    /// Возврашает ссылку на объект ASP.NET кэша, если кэширование разрешено.
-    /// При запрещении ведения кэша, всегда возврашает null.
-    /// </summary>
-    private static Cache GetCache()
-    {
-      if (DataCache.IsCacheEnable) return HttpRuntime.Cache;
-      return null;
-    }
-
-    /// <summary>
     /// Возвращает типизированный объект из глобального кэша приложений по уникальному имени
     /// </summary>
     /// <typeparam name="T">Тип возвращаемого объекта</typeparam>
@@ -53,10 +43,9 @@ namespace DevBian
     /// <returns>Извлеченный объект, или <paramref name="defaultResult"/> - если в кэше указанного объекта не обнаружено</returns>
     public static T GetData<T>(string cacheName, T defaultResult = default(T))
     {
-      var cache = DataCache.GetCache();
-      if (cache != null)
+      if (DataCache.IsCacheEnable)
       {
-        object result = cache.Get(cacheName);
+        object result = HttpRuntime.Cache.Get(cacheName);
         if (result is T) return (T)result;
         else if (result == null) return defaultResult;
         else
@@ -83,10 +72,9 @@ namespace DevBian
     /// <returns>Извлеченный объект, или <paramref name="defaultResult"/> - если в кэше указанного объекта не обнаружено</returns>
     public static T GetDeepCopiedData<T>(string cacheName, T defaultResult = default(T))
     {
-      var cache = DataCache.GetCache();
-      if (cache != null)
+      if (DataCache.IsCacheEnable)
       {
-        object result = cache.Get(cacheName);
+        object result = HttpRuntime.Cache.Get(cacheName);
         if (result is T) return DataCache.DeepCopy<T>((T)result);
         else if (result == null) return defaultResult;
         else
@@ -127,15 +115,14 @@ namespace DevBian
     /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
     public static void InsertData(string cacheName, object cacheValue)
     {
-      var cache = DataCache.GetCache();
-      if (cache != null)
+      if (DataCache.IsCacheEnable)
       {
         if (DataCache.ExpirationType == DataCacheExpirationType.SlidingExpiration)
-          cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
+          HttpRuntime.Cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
         else if (DataCache.ExpirationType == DataCacheExpirationType.AbsoluteExpiration)
-          cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
+          HttpRuntime.Cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
         else
-          cache.Insert(cacheName, cacheValue);
+          HttpRuntime.Cache.Insert(cacheName, cacheValue);
       }
     }
 
@@ -148,10 +135,9 @@ namespace DevBian
     /// <param name="expirationTime">Время хранения объекта в кэше</param>
     public static void InsertAbsoluteExpirationData(string cacheName, object cacheValue, TimeSpan expirationTime)
     {
-      var cache = DataCache.GetCache();
-      if (cache != null)
+      if (DataCache.IsCacheEnable)
       {
-        cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
+        HttpRuntime.Cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
       }
     }
 
@@ -164,10 +150,9 @@ namespace DevBian
     /// <param name="expirationTime">Время хранения объекта в кэше</param>
     public static void InsertSlidingExpirationData(string cacheName, object cacheValue, TimeSpan expirationTime)
     {
-      var cache = DataCache.GetCache();
-      if (cache != null)
+      if (DataCache.IsCacheEnable)
       {
-        cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, expirationTime);
+        HttpRuntime.Cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, expirationTime);
       }
     }
 
@@ -177,8 +162,10 @@ namespace DevBian
     /// <param name="cacheName">Имя объекта в кэше</param>
     public static void RemoveData(string cacheName)
     {
-      var cache = DataCache.GetCache();
-      if (cache != null) cache.Remove(cacheName);
+      if (DataCache.IsCacheEnable)
+      {
+        HttpRuntime.Cache.Remove(cacheName);
+      }
     }
 
     /// <summary>
@@ -188,15 +175,14 @@ namespace DevBian
     /// <param name="cacheNameStart">Частичное имя объекта в кэше</param>
     public static void RemoveAllData(string cacheNameStart)
     {
-      var cache = DataCache.GetCache();
-      if (cache != null)
+      if (DataCache.IsCacheEnable)
       {
-        IDictionaryEnumerator eCache = cache.GetEnumerator();
+        IDictionaryEnumerator eCache = HttpRuntime.Cache.GetEnumerator();
         while (eCache.MoveNext())
         {
           string key = eCache.Key as string;
           if (!string.IsNullOrEmpty(key) && key.StartsWith(cacheNameStart))
-            cache.Remove(key);
+            HttpRuntime.Cache.Remove(key);
         }
       }
     }
