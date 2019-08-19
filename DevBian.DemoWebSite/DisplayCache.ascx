@@ -1,4 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DisplayCache.ascx.cs" Inherits="DevBian.DemoWebSite.DisplayCache" %>
+
 <asp:Panel ID="panelCache" runat="server">
     <asp:Label ID="labelCount" runat="server" />
     <asp:Repeater ID="repItems" runat="server">
