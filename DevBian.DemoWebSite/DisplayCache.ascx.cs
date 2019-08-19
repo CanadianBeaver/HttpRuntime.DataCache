@@ -14,14 +14,16 @@ namespace DevBian.DemoWebSite
       this.panelCache.Visible = cache != null;
       if (this.panelCache.Visible)
       {
-        this.labelCount.Text = string.Format("Cache contains {0} item(s)", cache.Count.ToString());
+        this.panelCache.GroupingText = string.Format("Cache contains {0} item(s)", cache.Count.ToString());
         IList<object> result = new List<object>();
         IDictionaryEnumerator eCache = cache.GetEnumerator();
+        int index = 0;
         while (eCache.MoveNext())
         {
+          index++;
           string key = eCache.Key as string;
           string value = eCache.Value.ToString();
-          result.Add(new { Key = key, Value = value });
+          result.Add(new { Index = index, Key = key, Value = value });
         }
         this.repItems.DataSource = result;
         this.repItems.DataBind();
