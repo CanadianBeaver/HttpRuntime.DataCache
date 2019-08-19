@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevBian.DataCache", "DevBian.DataCache\DevBian.DataCache.csproj", "{67647E3F-A6E9-49C7-A72B-C401492E7FBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevBian.DemoWebSite", "DevBian.DemoWebSite\DevBian.DemoWebSite.csproj", "{1A0135FC-0A60-4624-84CC-A636BC1877A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{D3F48B9D-8B3C-43C5-99C6-3EA6968C4EDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,15 @@ Global
 		{1A0135FC-0A60-4624-84CC-A636BC1877A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A0135FC-0A60-4624-84CC-A636BC1877A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A0135FC-0A60-4624-84CC-A636BC1877A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3F48B9D-8B3C-43C5-99C6-3EA6968C4EDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F48B9D-8B3C-43C5-99C6-3EA6968C4EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3F48B9D-8B3C-43C5-99C6-3EA6968C4EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F48B9D-8B3C-43C5-99C6-3EA6968C4EDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F7C7F989-FB8F-40AB-A943-7704DC5A49F4}
 	EndGlobalSection
 EndGlobal
