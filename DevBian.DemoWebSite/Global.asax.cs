@@ -1,6 +1,7 @@
-﻿using DevBian.Caching;
+﻿using System;
 
-using System;
+using DevBian.Caching;
+using DevBian.DemoWebSite.Properties;
 
 namespace DevBian.DemoWebSite
 {
@@ -8,7 +9,7 @@ namespace DevBian.DemoWebSite
   {
     protected void Application_Start(object sender, EventArgs e)
     {
-      var settings = Properties.Settings.Default;
+      Settings settings = Settings.Default;
       DataCache.IsCacheEnable = settings.IsCacheEnable;
       DataCache.ExpirationType = settings.ExpirationType;
       DataCache.ExpirationTime = settings.ExpirationTime;

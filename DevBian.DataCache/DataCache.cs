@@ -98,9 +98,9 @@ namespace DevBian.Caching
     /// <returns></returns>
     private static T DeepCopy<T>(T obj)
     {
-      using (var ms = new MemoryStream())
+      using (MemoryStream ms = new MemoryStream())
       {
-        var bf = new BinaryFormatter();
+        BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(ms, obj);
         ms.Seek(0, SeekOrigin.Begin);
         return (T)bf.Deserialize(ms);
