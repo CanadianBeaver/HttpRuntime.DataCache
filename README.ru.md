@@ -34,9 +34,11 @@ ASP.NET кэш оперирует только экземплярами клас
 даже со значениями `Value types`, которые можно привести к `Nullable types`. Хотя дело конечно же в личном восприятии 
 исходного кода, хотелось бы иметь типизированные методы извлечения данных:
 ```csharp
-myClassName item = HttpRuntime.Cache["Key1"] as myClassName; // this is a dafault extraction
+// this is a dafault extraction
+myClassName item = HttpRuntime.Cache["Key1"] as myClassName; 
 
-myClassName item = DataCache.Get<myClassName>("Key1"); // this is a desired extraction with generic methods
+// this is a desired extraction with generic methods
+myClassName item = DataCache.Get<myClassName>("Key1"); 
 ```
 Если не устраивает типизированный вариант, то вполне можно использовать стандартный вариант кода. По сути, эти два варианта идентичны.
 Разница только в дополнительной проверке типа и значений по умолчанию, которые предоставляют типизированные методы, например:
