@@ -38,16 +38,16 @@ namespace DevBian.Caching
     /// Возвращает типизированный объект из глобального кэша приложений по уникальному имени
     /// </summary>
     /// <typeparam name="T">Тип возвращаемого объекта</typeparam>
-    /// <param name="cacheName">Имя объекта в кэше</param>
-    /// <param name="defaultResult">Значение, возвращаемое по умолчанию, если запрашиваемого объекта нет в кэше</param>
-    /// <returns>Извлеченный объект, или <paramref name="defaultResult"/> - если в кэше указанного объекта не обнаружено</returns>
-    public static T GetData<T>(string cacheName, T defaultResult = default(T))
+    /// <param name="key">Имя объекта в кэше</param>
+    /// <param name="defaultValue">Значение, возвращаемое по умолчанию, если запрашиваемого объекта нет в кэше</param>
+    /// <returns>Извлеченный объект, или <paramref name="defaultValue"/> - если в кэше указанного объекта не обнаружено</returns>
+    public static T GetData<T>(string key, T defaultValue = default(T))
     {
       if (DataCache.IsCacheEnable)
       {
-        object result = HttpRuntime.Cache.Get(cacheName);
+        object result = HttpRuntime.Cache.Get(key);
         if (result is T) return (T)result;
-        else if (result == null) return defaultResult;
+        else if (result == null) return defaultValue;
         else
           try
           {
@@ -55,10 +55,10 @@ namespace DevBian.Caching
           }
           catch
           {
-            return defaultResult;
+            return defaultValue;
           }
       }
-      return defaultResult;
+      return defaultValue;
     }
 
     /// <summary>
@@ -67,16 +67,16 @@ namespace DevBian.Caching
     /// дублирует его значения в новом объекте.
     /// </summary>
     /// <typeparam name="T">Тип возвращаемого объекта</typeparam>
-    /// <param name="cacheName">Имя объекта в кэше</param>
-    /// <param name="defaultResult">Значение, возвращаемое по умолчанию, если запрашиваемого объекта нет в кэше</param>
-    /// <returns>Извлеченный объект, или <paramref name="defaultResult"/> - если в кэше указанного объекта не обнаружено</returns>
-    public static T GetDeepCopiedData<T>(string cacheName, T defaultResult = default(T))
+    /// <param name="key">Имя объекта в кэше</param>
+    /// <param name="defaultValue">Значение, возвращаемое по умолчанию, если запрашиваемого объекта нет в кэше</param>
+    /// <returns>Извлеченный объект, или <paramref name="defaultValue"/> - если в кэше указанного объекта не обнаружено</returns>
+    public static T GetDeepCopiedData<T>(string key, T defaultValue = default(T))
     {
       if (DataCache.IsCacheEnable)
       {
-        object result = HttpRuntime.Cache.Get(cacheName);
+        object result = HttpRuntime.Cache.Get(key);
         if (result is T) return DataCache.DeepCopy<T>((T)result);
-        else if (result == null) return defaultResult;
+        else if (result == null) return defaultValue;
         else
           try
           {
@@ -84,10 +84,10 @@ namespace DevBian.Caching
           }
           catch
           {
-            return defaultResult;
+            return defaultValue;
           }
       }
-      return defaultResult;
+      return defaultValue;
     }
 
     /// <summary>
@@ -111,18 +111,24 @@ namespace DevBian.Caching
     /// Добавляет объект в глобальный кэш приложений используя параметры кэширования заданные по умолчнию.
     /// Если объект по такому имени уже существует, то он будет переписан новым значением.
     /// </summary>
-    /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
-    /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
-    public static void InsertData(string cacheName, object cacheValue)
+    /// <param name="key">Имя добавляемого объекта в кэше</param>
+    /// <param name="value">Значение добавляемого объекта в кэше</param>
+    public static void InsertData(string key, object value)
     {
       if (DataCache.IsCacheEnable)
       {
         if (DataCache.ExpirationType == CacheExpirationType.SlidingExpiration)
-          HttpRuntime.Cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
+        {
+          HttpRuntime.Cache.Insert(key, value, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
+        }
         else if (DataCache.ExpirationType == CacheExpirationType.AbsoluteExpiration)
-          HttpRuntime.Cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
+        {
+          HttpRuntime.Cache.Insert(key, value, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
+        }
         else
-          HttpRuntime.Cache.Insert(cacheName, cacheValue);
+        {
+          HttpRuntime.Cache.Insert(key, value);
+        }
       }
     }
 
@@ -130,14 +136,14 @@ namespace DevBian.Caching
     /// Добавляет объект в глобальный кэш приложений с абсолютным кэшированием на заданное время.
     /// Если объект по такому имени уже существует, то он будет переписан новым значением.
     /// </summary>
-    /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
-    /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
+    /// <param name="key">Имя добавляемого объекта в кэше</param>
+    /// <param name="value">Значение добавляемого объекта в кэше</param>
     /// <param name="expirationTime">Время хранения объекта в кэше</param>
-    public static void InsertAbsoluteExpirationData(string cacheName, object cacheValue, TimeSpan expirationTime)
+    public static void InsertAbsoluteExpirationData(string key, object value, TimeSpan expirationTime)
     {
       if (DataCache.IsCacheEnable)
       {
-        HttpRuntime.Cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
+        HttpRuntime.Cache.Insert(key, value, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
       }
     }
 
@@ -145,14 +151,14 @@ namespace DevBian.Caching
     /// Добавляет объект в глобальный кэш приложений со скользящим кэшированием на заданное время.
     /// Если объект по такому имени уже существует, то он будет переписан новым значением.
     /// </summary>
-    /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
-    /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
+    /// <param name="key">Имя добавляемого объекта в кэше</param>
+    /// <param name="value">Значение добавляемого объекта в кэше</param>
     /// <param name="expirationTime">Время хранения объекта в кэше</param>
-    public static void InsertSlidingExpirationData(string cacheName, object cacheValue, TimeSpan expirationTime)
+    public static void InsertSlidingExpirationData(string key, object value, TimeSpan expirationTime)
     {
       if (DataCache.IsCacheEnable)
       {
-        HttpRuntime.Cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, expirationTime);
+        HttpRuntime.Cache.Insert(key, value, null, Cache.NoAbsoluteExpiration, expirationTime);
       }
     }
 
@@ -160,19 +166,25 @@ namespace DevBian.Caching
     /// Добавляет объект в глобальный кэш приложений с заданными параметрами кэширования.
     /// Если объект по такому имени уже существует, то он будет переписан новым значением.
     /// </summary>
-    /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
-    /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
+    /// <param name="key">Имя добавляемого объекта в кэше</param>
+    /// <param name="value">Значение добавляемого объекта в кэше</param>
     /// <param name="expirationType">Тип хранения объекта в кэше</param>
-    public static void InsertExpirationData(string cacheName, object cacheValue, CacheExpirationType expirationType)
+    public static void InsertExpirationData(string key, object value, CacheExpirationType expirationType)
     {
       if (DataCache.IsCacheEnable)
       {
         if (expirationType == CacheExpirationType.AbsoluteExpiration)
-          HttpRuntime.Cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
+        {
+          HttpRuntime.Cache.Insert(key, value, null, DateTime.UtcNow.Add(DataCache.ExpirationTime), Cache.NoSlidingExpiration);
+        }
         else if (expirationType == CacheExpirationType.SlidingExpiration)
-          HttpRuntime.Cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
+        {
+          HttpRuntime.Cache.Insert(key, value, null, Cache.NoAbsoluteExpiration, DataCache.ExpirationTime);
+        }
         else
-          HttpRuntime.Cache.Insert(cacheName, cacheValue);
+        {
+          HttpRuntime.Cache.Insert(key, value);
+        }
       }
     }
 
@@ -180,32 +192,38 @@ namespace DevBian.Caching
     /// Добавляет объект в глобальный кэш приложений с заданными параметрами кэширования.
     /// Если объект по такому имени уже существует, то он будет переписан новым значением.
     /// </summary>
-    /// <param name="cacheName">Имя добавляемого объекта в кэше</param>
-    /// <param name="cacheValue">Значение добавляемого объекта в кэше</param>
+    /// <param name="key">Имя добавляемого объекта в кэше</param>
+    /// <param name="value">Значение добавляемого объекта в кэше</param>
     /// <param name="expirationType">Тип хранения объекта в кэше</param>
     /// <param name="expirationTime">Время хранения объекта в кэше</param>
-    public static void InsertExpirationData(string cacheName, object cacheValue, CacheExpirationType expirationType, TimeSpan expirationTime)
+    public static void InsertExpirationData(string key, object value, CacheExpirationType expirationType, TimeSpan expirationTime)
     {
       if (DataCache.IsCacheEnable)
       {
         if (expirationType == CacheExpirationType.AbsoluteExpiration)
-          HttpRuntime.Cache.Insert(cacheName, cacheValue, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
+        {
+          HttpRuntime.Cache.Insert(key, value, null, DateTime.UtcNow.Add(expirationTime), Cache.NoSlidingExpiration);
+        }
         else if (expirationType == CacheExpirationType.SlidingExpiration)
-          HttpRuntime.Cache.Insert(cacheName, cacheValue, null, Cache.NoAbsoluteExpiration, expirationTime);
+        {
+          HttpRuntime.Cache.Insert(key, value, null, Cache.NoAbsoluteExpiration, expirationTime);
+        }
         else
-          HttpRuntime.Cache.Insert(cacheName, cacheValue);
+        {
+          HttpRuntime.Cache.Insert(key, value);
+        }
       }
     }
 
     /// <summary>
     /// Удаляет объект из глобального кэша приложений по уникальному имени
     /// </summary>
-    /// <param name="cacheName">Имя объекта в кэше</param>
-    public static void RemoveDataByName(string cacheName)
+    /// <param name="key">Имя объекта в кэше</param>
+    public static void RemoveDataByKey(string key)
     {
       if (DataCache.IsCacheEnable)
       {
-        HttpRuntime.Cache.Remove(cacheName);
+        HttpRuntime.Cache.Remove(key);
       }
     }
 
@@ -213,8 +231,8 @@ namespace DevBian.Caching
     /// Удаляет объекты из глобального кэша приложений по частичному совпадению имени.
     /// Удаляются все объекты, имена которых начинаются с указанного значения.
     /// </summary>
-    /// <param name="cacheNameStart">Частичное имя объекта в кэше</param>
-    public static void RemoveAllDataByName(string cacheNameStart)
+    /// <param name="keyStartsWith">Частичное имя объекта в кэше</param>
+    public static void RemoveAllDataByKey(string keyStartsWith)
     {
       if (DataCache.IsCacheEnable)
       {
@@ -222,8 +240,10 @@ namespace DevBian.Caching
         while (eCache.MoveNext())
         {
           string key = eCache.Key as string;
-          if (!string.IsNullOrEmpty(key) && key.StartsWith(cacheNameStart))
+          if (!string.IsNullOrEmpty(key) && key.StartsWith(keyStartsWith))
+          {
             HttpRuntime.Cache.Remove(key);
+          }
         }
       }
     }

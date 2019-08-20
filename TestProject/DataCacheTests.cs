@@ -176,7 +176,7 @@ public class DataCacheTests
   }
 
   [TestMethod()]
-  public void RemoveDataByName()
+  public void RemoveDataByKey()
   {
     // Arrange
     DataCache.InsertData("ddd1", 0);
@@ -190,25 +190,25 @@ public class DataCacheTests
     Assert.AreEqual(HttpRuntime.Cache.Count, 6);
 
     // Act
-    DataCache.RemoveDataByName("ddd");
+    DataCache.RemoveDataByKey("ddd");
 
     // Assert
     Assert.AreEqual(HttpRuntime.Cache.Count, 6);
 
     // Act
-    DataCache.RemoveDataByName("ddd1");
+    DataCache.RemoveDataByKey("ddd1");
 
     // Assert
     Assert.AreEqual(HttpRuntime.Cache.Count, 5);
 
     // Act
-    DataCache.RemoveDataByName("ss");
+    DataCache.RemoveDataByKey("ss");
 
     // Assert
     Assert.AreEqual(HttpRuntime.Cache.Count, 5);
 
     // Act
-    DataCache.RemoveDataByName("sss");
+    DataCache.RemoveDataByKey("sss");
 
     // Assert
     Assert.AreEqual(HttpRuntime.Cache.Count, 4);
@@ -236,7 +236,7 @@ public class DataCacheTests
   }
 
   [TestMethod()]
-  public void RemoveAllDataByName()
+  public void RemoveAllDataByKey()
   {
     // Arrange
     DataCache.InsertData("ddd1", 0);
@@ -250,13 +250,13 @@ public class DataCacheTests
     Assert.AreEqual(HttpRuntime.Cache.Count, 6);
 
     // Act
-    DataCache.RemoveAllDataByName("ddd");
+    DataCache.RemoveAllDataByKey("ddd");
 
     // Assert
     Assert.AreEqual(HttpRuntime.Cache.Count, 2);
 
     // Act
-    DataCache.RemoveAllDataByName("sss");
+    DataCache.RemoveAllDataByKey("sss");
 
     // Assert
     Assert.AreEqual(HttpRuntime.Cache.Count, 1);
