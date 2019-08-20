@@ -8,6 +8,8 @@ namespace DevBian.DemoWebSite
   {
     public const string STR_CACHENAME = "something";
 
+    private static object lockobj = new object();
+
     protected void Page_Load(object sender, EventArgs e)
     {
       if (!this.IsPostBack)
@@ -25,17 +27,19 @@ namespace DevBian.DemoWebSite
       {
         SomethingDataModel val = DataCache.GetData<SomethingDataModel>(STR_CACHENAME);
         if (val != null)
-        {
-          val.ID++;
-        }
+          lock (Default.lockobj)
+          {
+            val.ID++;
+          }
       }
       else if (Request.Form["button2"] != null)
       {
         SomethingDataModel val = DataCache.GetDeepCopiedData<SomethingDataModel>(STR_CACHENAME);
         if (val != null)
-        {
-          val.ID++;
-        }
+          //lock (Default.lockobj) do not need lock, it is a deep copied object
+          {
+            val.ID++;
+          }
       }
     }
 
