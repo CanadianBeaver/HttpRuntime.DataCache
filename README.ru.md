@@ -43,9 +43,9 @@ myClassName item = DataCache.Get<myClassName>("Key1");
 Если не устраивает типизированный вариант, то вполне можно использовать стандартный вариант кода. По сути, эти два варианта идентичны.
 Разница только в дополнительной проверке типа и дополнительном функционале, который могут предложить типизированные методы. Например,  можно задать значение по умолчанию, если извлекаемых данных нет в кеше:
 ```csharp
-myClassName defaultValue = new myClassName(/* init values */);
+myClassName defaultValue = new myClassName(/* init properties */);
 myClassName item = DataCache.Get<myClassName>("Key1", defaultValue); 
-/* if there is nothing in the cache, then the item will be the defaultValue */
+/* if there is nothing in the cache, then the item will be defaultValue */
 ```
 
 #### Deep copied data
