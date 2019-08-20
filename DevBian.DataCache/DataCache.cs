@@ -201,11 +201,30 @@ namespace DevBian.Caching
     /// Удаляет объект из глобального кэша приложений по уникальному имени
     /// </summary>
     /// <param name="cacheName">Имя объекта в кэше</param>
-    public static void RemoveData(string cacheName)
+    public static void RemoveDataByName(string cacheName)
     {
       if (DataCache.IsCacheEnable)
       {
         HttpRuntime.Cache.Remove(cacheName);
+      }
+    }
+
+    /// <summary>
+    /// Удаляет объекты из глобального кэша приложений по частичному совпадению имени.
+    /// Удаляются все объекты, имена которых начинаются с указанного значения.
+    /// </summary>
+    /// <param name="cacheNameStart">Частичное имя объекта в кэше</param>
+    public static void RemoveAllDataByName(string cacheNameStart)
+    {
+      if (DataCache.IsCacheEnable)
+      {
+        IDictionaryEnumerator eCache = HttpRuntime.Cache.GetEnumerator();
+        while (eCache.MoveNext())
+        {
+          string key = eCache.Key as string;
+          if (!string.IsNullOrEmpty(key) && key.StartsWith(cacheNameStart))
+            HttpRuntime.Cache.Remove(key);
+        }
       }
     }
 
@@ -221,25 +240,6 @@ namespace DevBian.Caching
         {
           string key = eCache.Key as string;
           HttpRuntime.Cache.Remove(key);
-        }
-      }
-    }
-
-    /// <summary>
-    /// Удаляет объекты из глобального кэша приложений по частичному совпадению имени.
-    /// Удаляются все объекты, имена которых начинаются с указанного значения.
-    /// </summary>
-    /// <param name="cacheNameStart">Частичное имя объекта в кэше</param>
-    public static void RemoveAllData(string cacheNameStart)
-    {
-      if (DataCache.IsCacheEnable)
-      {
-        IDictionaryEnumerator eCache = HttpRuntime.Cache.GetEnumerator();
-        while (eCache.MoveNext())
-        {
-          string key = eCache.Key as string;
-          if (!string.IsNullOrEmpty(key) && key.StartsWith(cacheNameStart))
-            HttpRuntime.Cache.Remove(key);
         }
       }
     }
