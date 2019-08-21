@@ -83,6 +83,31 @@ public static CacheExpirationType ExpirationType;
 public static TimeSpan ExpirationTime;
 ```
 
+Перечисление CacheExpirationType определяет на какой срок данные будут храниться в кэше
+
+```csharp
+/// <summary>
+/// Тип хранения объектов в кэше
+/// </summary>
+public enum CacheExpirationType
+{
+    /// <summary>
+    /// Без ограничения по времени, значение свойства <seealso cref="DataCache.ExpirationTime"/> будет проигнорировано
+    /// </summary>
+    NoExpiration,
+
+    /// <summary>
+    /// Абсолютное кэширование на заданное время в свойстве <seealso cref="DataCache.ExpirationTime"/>
+    /// </summary>
+    AbsoluteExpiration,
+
+    /// <summary>
+    /// Скользящее кэширование на заданное время в свойстве <seealso cref="DataCache.ExpirationTime"/>
+    /// </summary>
+    SlidingExpiration
+}
+```
+
 #### Methods to extract data from the cache
 
 ```csharp
