@@ -83,7 +83,7 @@ public static CacheExpirationType ExpirationType;
 public static TimeSpan ExpirationTime;
 ```
 
-Перечисление CacheExpirationType определяет на какой срок данные будут храниться в кэше
+Перечисление `CacheExpirationType` определяет на какой срок данные будут храниться в кэше
 
 ```csharp
 /// <summary>
