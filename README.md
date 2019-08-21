@@ -1,5 +1,27 @@
 ## DataCache
 
+The ASP.NET cache in WebForms for storing data in memory was implemented very conveniently. In the early years of the .NET platform, developers often used to work with `System.Web` namespace, even in WinForms applications.
+
+The code template that is constantly being offered in articles about caching in ASP.NET WebForms is very simple and practical:
+
+```csharp
+myClassName item = HttpRuntime.Cache["Key1"] as myClassName;
+if (item == null)
+{
+    item = /* get value from database or from web service or from somewhere else */;
+    HttpRuntime.Insert("Key1", item);
+}
+// using the item that has been populated from cache or from storage
+```
+
+However, the ASP.NET cache implementation does not include some good features.
+
+
+
+
+
+
+
 ### Implementation
 
 #### Properties and settings
