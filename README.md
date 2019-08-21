@@ -1,4 +1,4 @@
-The ASP.NET cache in WebForms for storing temporary data was implemented very conveniently. In the early years of the .NET platform, developers often used to work with `System.Web` namespace, even in WinForms applications.
+The ASP.NET WebForms Cache was implemented very conveniently for temporary keeping the operational data. In the early years of the .NET platform, developers often used to work with `System.Web` namespace, even in WinForms applications.
 
 The code template, that is constantly being offered in articles about caching in ASP.NET WebForms, is very simple and practical:
 
