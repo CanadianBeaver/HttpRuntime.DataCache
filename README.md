@@ -54,15 +54,136 @@ The described functions are optional and can be easily implemented in any web ap
 
 Sad but true.
 
+#### Properties and settings
 
+```csharp
+/// <summary>
+/// Is cache used or not
+/// </summary>
+public static bool IsCacheEnable;
 
+/// <summary>
+/// How to store objects in the cache
+/// </summary>
+public static CacheExpirationType ExpirationType;
 
+/// <summary>
+/// How long objects should be stored in the cache 
+/// </summary>
+public static TimeSpan ExpirationTime;
+```
 
+Enum `CacheExpirationType` defines how to store objects in the cache
 
+```csharp
+/// <summary>
+/// How to store objects in the cache
+/// </summary>
+public enum CacheExpirationType
+{
+    /// <summary>
+    /// Without time limit, the value of the <seealso cref = "DataCache.ExpirationTime" /> property will be ignored
+    /// </summary>
+    NoExpiration,
 
+    /// <summary>
+    /// The <seealso cref="DataCache.ExpirationTime"/> at which the inserted object expires and is removed from the cache
+    /// </summary>
+    AbsoluteExpiration,
 
+    /// <summary>
+    /// The interval <seealso cref="DataCache.ExpirationTime"/> between the time the inserted object is last accessed and the time at which that object expires
+    /// </summary>
+    SlidingExpiration
+}
+```
 
+#### Methods to extract data from the cache
 
+```csharp
+/// <summary>
+/// Retrieves the specified item from the Cache object
+/// </summary>
+/// <typeparam name="T">The type for the cache item to retrieve</typeparam>
+/// <param name="key">The identifier for the cache item to retrieve</param>
+/// <param name="defaultValue">The default value if the object is not in the cache</param>
+/// <returns>The retrieved cache item, or <paramref name="defaultValue"/> if the key is not found</returns>
+public static T GetData<T>(string key, T defaultValue = default(T))
+
+/// <summary>
+/// Retrieves the deep copied of specified item from the Cache object
+/// </summary>
+/// <typeparam name="T">The type for the cache item to retrieve</typeparam>
+/// <param name="key">The identifier for the cache item to retrieve</param>
+/// <param name="defaultValue">The default value if the object is not in the cache</param>
+/// <returns>The retrieved cache item, or <paramref name="defaultValue"/> if the key is not found</returns>
+public static T GetDeepCopiedData<T>(string key, T defaultValue = default(T))
+```
+
+#### Methods to store data in the cache
+
+```csharp
+/// <summary>
+/// Inserts an item into the cache with a cache key to reference its location, using default values provided by the settings
+/// </summary>
+/// <param name="key">The cache key used to reference the item</param>
+/// <param name="value">The object to be inserted into the cache</param>
+public static void InsertData(string key, object value)
+
+/// <summary>
+/// Inserts an item into the cache with a cache key to reference its location, using the absolute expiration time
+/// </summary>
+/// <param name="key">The cache key used to reference the item</param>
+/// <param name="value">The object to be inserted into the cache</param>
+/// <param name="expirationTime">How long the object should be stored in the cache</param>
+public static void InsertAbsoluteExpirationData(string key, object value, TimeSpan expirationTime)
+
+/// <summary>
+/// Inserts an item into the cache with a cache key to reference its location, using the sliding expiration time
+/// </summary>
+/// <param name="key">The cache key used to reference the item</param>
+/// <param name="value">The object to be inserted into the cache</param>
+/// <param name="expirationTime">How long the object should be stored in the cache</param>
+public static void InsertSlidingExpirationData(string key, object value, TimeSpan expirationTime)
+
+/// <summary>
+/// Inserts an item into the cache with a cache key to reference its location, using the type of expiration and default value for expiration time
+/// </summary>
+/// <param name="key">The cache key used to reference the item</param>
+/// <param name="value">The object to be inserted into the cache</param>
+/// <param name="expirationType">How to store objects in the cache</param>
+public static void InsertExpirationData(string key, object value, CacheExpirationType expirationType)
+
+/// <summary>
+/// Inserts an item into the cache with a cache key to reference its location, using the type of expiration and expiration time
+/// </summary>
+/// <param name="key">The cache key used to reference the item</param>
+/// <param name="value">The object to be inserted into the cache</param>
+/// <param name="expirationType">How to store objects in the cache</param>
+/// <param name="expirationTime">How long the object should be stored in the cache</param>
+public static void InsertExpirationData(string key, object value, CacheExpirationType expirationType, TimeSpan expirationTime)
+```
+
+#### Methods to remove data from the cache
+
+```csharp
+/// <summary>
+/// Removes the specified item from the application's cache 
+/// </summary>
+/// <param name="key">An identifier for the cache item to remove</param>
+public static void RemoveDataByKey(string key)
+
+/// <summary>
+/// Removes all items from the application's cache that starts with key
+/// </summary>
+/// <param name="keyStartsWith">An starts with identifier for the cache item to remove</param>
+public static void RemoveAllDataByKey(string keyStartsWith)
+
+/// <summary>
+/// Removes all items from the application's cache 
+/// </summary>
+public static void RemoveAllData()
+```
 
 ### Usage example
 

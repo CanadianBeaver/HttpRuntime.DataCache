@@ -249,7 +249,7 @@ namespace System.Web.Caching
     }
 
     /// <summary>
-    /// Удаляет все объекты из глобального кэша приложений.
+    /// Удаляет все объекты из глобального кэша приложений
     /// </summary>
     public static void RemoveAllData()
     {
