@@ -12,6 +12,7 @@ if (ds == null)
     HttpRuntime.Cache.Insert("KeyName", ds);
 }
 // using the instance of object that has been populated from cache or from storage
+ds.Tables[0].Rows[0] = ...
 ```
 
 Тем не менее, предлагаемая в ASP.NET реализация кэша не включает нескольких простых, но порой востребованных, функциональностей.
