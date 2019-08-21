@@ -15,7 +15,7 @@ if (ds == null)
 DataRow dr = ds.Tables[0].Rows[0];
 ```
 
-However, the ASP.NET cache implementation does not include some good features.
+However, the ASP.NET Cache implementation does not include some good features.
 
 ### ASP.NET cache settings
 
