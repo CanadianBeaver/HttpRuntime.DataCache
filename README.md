@@ -1,4 +1,4 @@
-## DataCache
+## System.Web.Caching.DataCache
 
 The ASP.NET cache in WebForms for storing temporary data was implemented very conveniently. In the early years of the .NET platform, developers often used to work with `System.Web` namespace, even in WinForms applications.
 
