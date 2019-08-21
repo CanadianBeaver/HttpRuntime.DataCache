@@ -64,7 +64,7 @@ ASP.NET кэш всегда возвращает объект, хранящий�
 
 Sad but true.
 
-### Properties and settings
+#### Properties and settings
 
 ```csharp
 /// <summary>
@@ -85,7 +85,7 @@ public static TimeSpan ExpirationTime;
 
 The interval between the time the inserted object was last accessed and the time at which that object expires.
 
-### Methods to extract data from the cache
+#### Methods to extract data from the cache
 
 ```csharp
 /// <summary>
@@ -109,7 +109,7 @@ public static T GetData<T>(string key, T defaultValue = default(T))
 public static T GetDeepCopiedData<T>(string key, T defaultValue = default(T))
 ```
 
-### Methods to store data in the cache
+#### Methods to store data in the cache
 
 ```csharp
 /// <summary>
@@ -158,7 +158,7 @@ public static void InsertExpirationData(string key, object value, CacheExpiratio
 public static void InsertExpirationData(string key, object value, CacheExpirationType expirationType, TimeSpan expirationTime)
 ```
 
-### Methods to remove data from the cache
+#### Methods to remove data from the cache
 
 ```csharp
 /// <summary>
