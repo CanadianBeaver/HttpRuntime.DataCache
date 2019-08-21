@@ -83,8 +83,6 @@ public static CacheExpirationType ExpirationType;
 public static TimeSpan ExpirationTime;
 ```
 
-The interval between the time the inserted object was last accessed and the time at which that object expires.
-
 #### Methods to extract data from the cache
 
 ```csharp
