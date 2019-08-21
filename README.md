@@ -3,13 +3,15 @@ The ASP.NET WebForms Cache was implemented very conveniently for temporary keepi
 The code template, that is constantly being offered in articles about ASP.NET caching, is very simple and practical:
 
 ```csharp
-myClassName item = HttpRuntime.Cache["Key1"] as myClassName;
-if (item == null)
+// try to get an instance of object from cache
+DataSet ds = HttpRuntime.Cache["KeyName"] as DataSet;
+// check the result and recreate it, if it is null
+if (ds == null)
 {
-    item = /* get value from database or from web service or from somewhere else */;
-    HttpRuntime.Insert("Key1", item);
+    ds = QueryDataFromDatabase();
+    HttpRuntime.Cache.Insert("KeyName", ds);
 }
-// using the item that has been populated from cache or from storage
+// using the instance of object that has been populated from cache or from storage
 ```
 
 However, the ASP.NET cache implementation does not include some good features.
