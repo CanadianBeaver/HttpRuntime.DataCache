@@ -12,6 +12,7 @@ if (ds == null)
     HttpRuntime.Cache.Insert("KeyName", ds);
 }
 // using the instance of object that has been populated from cache or from storage
+ds.Tables[0].Rows[0] = ...
 ```
 
 However, the ASP.NET cache implementation does not include some good features.
