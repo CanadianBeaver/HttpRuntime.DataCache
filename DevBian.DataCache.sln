@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevBian.DataCache", "DevBian.DataCache\DevBian.DataCache.csproj", "{67647E3F-A6E9-49C7-A72B-C401492E7FBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevBian.DemoWebSite", "DevBian.DemoWebSite\DevBian.DemoWebSite.csproj", "{1A0135FC-0A60-4624-84CC-A636BC1877A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebSite", "DemoWebSite\DemoWebSite.csproj", "{1A0135FC-0A60-4624-84CC-A636BC1877A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{D3F48B9D-8B3C-43C5-99C6-3EA6968C4EDB}"
 EndProject

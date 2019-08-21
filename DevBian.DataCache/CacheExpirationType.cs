@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DevBian.Caching
+namespace System.Web.Caching
 {
   /// <summary>
   /// Тип хранения объектов в кэше

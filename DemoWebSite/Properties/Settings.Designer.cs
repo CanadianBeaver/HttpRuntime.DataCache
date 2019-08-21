@@ -35,9 +35,9 @@ namespace DevBian.DemoWebSite.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("SlidingExpiration")]
-        public global::DevBian.Caching.CacheExpirationType ExpirationType {
+        public global::System.Web.Caching.CacheExpirationType ExpirationType {
             get {
-                return ((global::DevBian.Caching.CacheExpirationType)(this["ExpirationType"]));
+                return ((global::System.Web.Caching.CacheExpirationType)(this["ExpirationType"]));
             }
         }
         

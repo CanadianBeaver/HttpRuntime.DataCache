@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
 using System.Web.Caching;
 
-namespace DevBian.Caching
+namespace System.Web.Caching
 {
   public static class DataCache
   {

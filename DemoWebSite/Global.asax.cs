@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Web.Caching;
 
-using DevBian.Caching;
 using DevBian.DemoWebSite.Properties;
 
 namespace DevBian.DemoWebSite
