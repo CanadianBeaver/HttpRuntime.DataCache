@@ -3,13 +3,15 @@
 Предлагаемый повсеместно шаблон кода очень прост и практичен:
 
 ```csharp
-myClassName item = HttpRuntime.Cache["Key1"] as myClassName;
-if (item == null)
+// try to get an instance of object from cache
+DataSet ds = HttpRuntime.Cache["KeyName"] as DataSet;
+// check the result and recreate it, if it is null
+if (ds == null)
 {
-    item = /* get value from database or from web service or from somewhere else */;
-    HttpRuntime.Insert("Key1", item);
+    ds = QueryDataFromDatabase();
+    HttpRuntime.Cache.Insert("KeyName", ds);
 }
-// using the item that has been populated from cache or from storage
+// using the instance of object that has been populated from cache or from storage
 ```
 
 Тем не менее, предлагаемая в ASP.NET реализация кэша не включает нескольких простых, но порой востребованных, функциональностей.
