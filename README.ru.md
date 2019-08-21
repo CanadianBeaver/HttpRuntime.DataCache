@@ -1,5 +1,3 @@
-## DataCache
-
 Реализация кэша для временного хранения операционных данных в ASP.NET WebForms реализована настолько удачно, что не требует никаких улучшений и подходит для любого класса приложений. В ранние годы платформы .NET, за неимением ничего лучшего, разработчики зачастую импортировали пространство имён `System.Web` даже в WinForms приложения, чтобы иметь возможность работать с кэшем объектов в памяти. 
 
 Предлагаемый повсеместно шаблон кода очень прост и практичен:
@@ -16,13 +14,13 @@ if (item == null)
 
 Тем не менее, предлагаемая в ASP.NET реализация кэша не включает нескольких простых, но порой востребованных, функциональностей.
 
-#### Параметры кэша по умолчанию
+### Параметры кэша по умолчанию
 
 Несмотря на то, что метод добавления значения в кэш
 [Cache.Insert(String, Object)](https://docs.microsoft.com/en-us/dotnet/api/system.web.caching.cache.insert?view=netframework-1.1#System_Web_Caching_Cache_Insert_System_String_System_Object_)
 пригоден для большинства случаев, зачастую желательно указание параметров хранения в кеше по умолчанию или на основе свойств web-приложения, хранящихся в файле `Web.config`, а иногда даже и полного отключения кеша для всего приложения. При этом основной код приложения не должен изменяться, запросы на извлечение данных из кэша должны возвращать `null`, а добавадение данных в кэш не должно ничего менять.
 
-#### Универсальные методы и значения по умолчанию
+### Универсальные методы и значения по умолчанию
 
 ASP.NET кэш оперирует только экземплярами класса `object`. В большинстве случаев это не представляет проблемы, даже со значениями `Value types`, которые можно привести к `Nullable types`. Хотя дело конечно же в личном восприятии исходного кода, но хотелось бы иметь возможность использовать универсальные методы для извлечения данных:
 
@@ -42,21 +40,21 @@ myClassName item = DataCache.Get<myClassName>("Key1", defaultValue);
 /* if there is nothing in the cache, then the item will be defaultValue */
 ```
 
-#### Deep copied data
+### Deep copied data
 
 ASP.NET кэш всегда возвращает объект, хранящийся в кэше. Это означает, что изменения какого-либо свойства извлечённого объекта, повлечёт также и изменение объекта хранящего в кеше, так как это один и тот же объект. Также, стоит учесть thread safe, так как объекты в кэше не безопасны для изменения в разных потоках. В реальном приложении потребность изменения объектов хранящихся в кэше возникает не часто, но возникает. Одна из удобных функциональностей заключается в извлечении копии объекта из кэша с которой можно выполнять произвольные действия, не беспокоясь о храняшихся данных в кеше.
 
-#### Хранение и очистка данных по регионам
+### Хранение и очистка данных по регионам
 
 Для приложения ASP.NET кэш представляет собой коллекцию пар ключ-значение. Это просто и элегантно, но с ростом приложения становится затруднительно подбирать правильные ключи. Например рассмотрим вариант кэширования двух связанных таблиц базы данных, например Vendors и Models. Скорее всего приложению потребуются все данные из таблицы Vendors и только связанные с определённой записью таблицы Vendors, записи таблицы Models. Организовать хранение таких срезов данных можно например по ключу `Vendors` для всех записей таблицы Vendors и ключам вида `Models.[VendorID]` для связанных записей таблицы Models. При изменении записи таблицы Vendors может потребоваться очистить не только кэш таблицы Vendors, но и кэши связанных записей таблицы Models. Использование регионов хранения данных в кеше позволило бы в данном случае очищать кэш всего региона сразу, а не обрабатывать каждый ключ по отдельности.
 
-### Implementation
+## Implementation
 
 Описанные функциональности не критичны и могут без особых усилий быть реализованы прямо в приложении. За время разработки веб-приложений на платформе ASP.NET я собрал всё нужное в одной библиотеке взяв за основу реализации [шаблон Заместитель](https://en.wikipedia.org/wiki/Proxy_pattern). Данная библиотека работает на версии .NET Framework 2.0 и выше. С выходом .NET Framework 4.0, в котором представлено пространство имён `System.Runtime.Caching` и несколько классов с новой моделью кэширования, потребность в стандартном кэше ASP.NET и его улучшениях конечно же отпадает. 
 
 Sad but true.
 
-#### Properties and settings
+### Properties and settings
 
 ```csharp
 /// <summary>
@@ -100,7 +98,7 @@ public enum CacheExpirationType
 }
 ```
 
-#### Methods to extract data from the cache
+### Methods to extract data from the cache
 
 ```csharp
 /// <summary>
@@ -124,7 +122,7 @@ public static T GetData<T>(string key, T defaultValue = default(T))
 public static T GetDeepCopiedData<T>(string key, T defaultValue = default(T))
 ```
 
-#### Methods to store data in the cache
+### Methods to store data in the cache
 
 ```csharp
 /// <summary>
@@ -173,7 +171,7 @@ public static void InsertExpirationData(string key, object value, CacheExpiratio
 public static void InsertExpirationData(string key, object value, CacheExpirationType expirationType, TimeSpan expirationTime)
 ```
 
-#### Methods to remove data from the cache
+### Methods to remove data from the cache
 
 ```csharp
 /// <summary>
@@ -195,9 +193,9 @@ public static void RemoveAllDataByKey(string keyStartsWith)
 public static void RemoveAllData()
 ```
 
-### Usage example
+## Usage example
 
-##### 1. Settings the default parameters when application starts
+#### 1. Settings the default parameters when application starts
 
 ```csharp
 public class Global : System.Web.HttpApplication
@@ -212,7 +210,7 @@ public class Global : System.Web.HttpApplication
 }
 ```
 
-##### 2. Implement the standard template working with cache on the Page or in DAL
+#### 2. Implement the standard template working with cache on the Page or in DAL
 
 ```csharp
 public partial class DefaultPage : System.Web.UI.Page
@@ -237,7 +235,7 @@ public partial class DefaultPage : System.Web.UI.Page
 
 Если требуется задать параметры хранения в кэше отличные от заданных при старте приложения, воспользуйтесь одним из переопределённых методов `Insert{Which}Data`.
 
-##### 3. In the admin panel or when the database was updated remove also cached values by key or by key that starts with
+#### 3. In the admin panel or when the database was updated remove also cached values by key or by key that starts with
 
 ```csharp
 public partial class DefaultPage : System.Web.UI.Page
@@ -256,7 +254,7 @@ public partial class DefaultPage : System.Web.UI.Page
 }
 ```
 
-### Support or Contact
+## Support or Contact
 
 Having questions? [Contact me](https://github.com/CanadianBeaver) and I will help you sort it out.
  
