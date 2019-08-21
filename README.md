@@ -1,5 +1,3 @@
-## System.Web.Caching.DataCache
-
 The ASP.NET cache in WebForms for storing temporary data was implemented very conveniently. In the early years of the .NET platform, developers often used to work with `System.Web` namespace, even in WinForms applications.
 
 The code template, that is constantly being offered in articles about caching in ASP.NET WebForms, is very simple and practical:
@@ -16,11 +14,11 @@ if (item == null)
 
 However, the ASP.NET cache implementation does not include some good features.
 
-#### ASP.NET cache settings
+### ASP.NET cache settings
 
 Although the [Cache.Insert(String, Object)](https://docs.microsoft.com/en-us/dotnet/api/system.web.caching.cache.insert?view=netframework-1.1#System_Web_Caching_Cache_Insert_System_String_System_Object_) method, that adds a value into the cache, is suitable for most cases, it is often desirable to applay different settings, perhaps based on the web application's settings stored in the `Web.config` file, and sometimes even completely disabling the cache for the entire application. In this case, the source code should not be changed and application should run without recompiling.
 
-#### Generic methods and default values
+### Generic methods and default values
 
 The ASP.NET cache always returns instances of the `object` class, no matter what the actual type of the instance is. In most cases, this is not a problem, because the `Nullable types` can be used instead of the `Value types`. Perhaps you would like to have generic methods for retrieving data from the cache:
 
@@ -40,21 +38,21 @@ myClassName item = DataCache.Get<myClassName>("Key1", defaultValue);
 /* if there is nothing in the cache, then the item will be defaultValue */
 ```
 
-#### Deep copied data
+### Deep copied data
 
 The ASP.NET cache always returns the object stored in the cache. This means that changes to any property of the extracted object will also change the object stored in the cache, since these are the same objects. In some cases, you may want to modify the retrieved object, but leave the object in the cache unchanged. One of the convenient functionality is to retrieve a copy of an object from the cache which can be changed without worrying about the object in the cache.
 
-#### Regions of cheched data 
+### Regions of cheched data 
 
 The ASP.NET cache is similar to a `NameValueCollection`. It is simple and elegant solution for a small web application, but it becomes difficult to generate the keys when application grows up. For example, consider caching two related tables, such as Vendors and Models. In this case web application will keep all data from the Vendors table in one cached object and many cached objects for associated records of the Models table. The key for Vendors supposed to be a `Vendors` and the keys for Models supposed to be `Models.[VendorID]`. When Vendors table has changed, cached instance for Vendors and only associated instances for Models have to be removed from cache. This means that data should be cached and removed from cache by regions.
 
-### Implementation
+## Implementation
 
 The described functions are optional and can be easily implemented in any web application. [Proxy template](https://en.wikipedia.org/wiki/Proxy_pattern) is a good option for implementing all the described features. The resulted library can be used on all .NET Frameworks, starting version 2.0. The .NET Framework 4.0 introduces the `System.Runtime.Caching` namespace and several classes with a new caching model. Therefore, using the standard ASP.NET cache and its improvements is not required.
 
 Sad but true.
 
-#### Properties and settings
+### Properties and settings
 
 ```csharp
 /// <summary>
@@ -98,7 +96,7 @@ public enum CacheExpirationType
 }
 ```
 
-#### Methods to extract data from the cache
+### Methods to extract data from the cache
 
 ```csharp
 /// <summary>
@@ -120,7 +118,7 @@ public static T GetData<T>(string key, T defaultValue = default(T))
 public static T GetDeepCopiedData<T>(string key, T defaultValue = default(T))
 ```
 
-#### Methods to store data in the cache
+### Methods to store data in the cache
 
 ```csharp
 /// <summary>
@@ -164,7 +162,7 @@ public static void InsertExpirationData(string key, object value, CacheExpiratio
 public static void InsertExpirationData(string key, object value, CacheExpirationType expirationType, TimeSpan expirationTime)
 ```
 
-#### Methods to remove data from the cache
+### Methods to remove data from the cache
 
 ```csharp
 /// <summary>
@@ -185,9 +183,9 @@ public static void RemoveAllDataByKey(string keyStartsWith)
 public static void RemoveAllData()
 ```
 
-### Usage example
+## Usage example
 
-##### 1. Settings the default parameters when application starts
+#### 1. Settings the default parameters when application starts
 
 ```csharp
 public class Global : System.Web.HttpApplication
@@ -202,7 +200,7 @@ public class Global : System.Web.HttpApplication
 }
 ```
 
-##### 2. Implement the standard template working with cache on the Page or in DAL
+#### 2. Implement the standard template working with cache on the Page or in DAL
 
 ```csharp
 public partial class DefaultPage : System.Web.UI.Page
@@ -227,7 +225,7 @@ public partial class DefaultPage : System.Web.UI.Page
 
 If you want to define time settings that are different from specified by default in the cache, use one of the overridden `Insert{Which}Data` methods.
 
-##### 3. In the admin panel or when the database was updated remove also cached values by key or by key that starts with
+#### 3. In the admin panel or when the database was updated remove also cached values by key or by key that starts with
 
 ```csharp
 public partial class DefaultPage : System.Web.UI.Page
@@ -246,7 +244,7 @@ public partial class DefaultPage : System.Web.UI.Page
 }
 ```
 
-### Support or Contact
+## Support or Contact
 
 Having questions? [Contact me](https://github.com/CanadianBeaver) and I will help you sort it out.
 
