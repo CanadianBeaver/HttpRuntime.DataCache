@@ -19,7 +19,7 @@ However, the ASP.NET Cache implementation does not include some desirable featur
 
 ### ASP.NET cache settings
 
-Although the [Cache.Insert(String, Object)](https://docs.microsoft.com/en-us/dotnet/api/system.web.caching.cache.insert?view=netframework-1.1#System_Web_Caching_Cache_Insert_System_String_System_Object_) method, that adds a value into the cache, is suitable for most cases, it is often desirable to applay different settings, perhaps based on the web application's settings stored in the `Web.config` file, and sometimes even completely disabling the cache for the entire application. In this case, the source code should not be changed and application should run without recompiling.
+Although the [Cache.Insert(String, Object)](https://docs.microsoft.com/en-us/dotnet/api/system.web.caching.cache.insert?view=netframework-1.1#System_Web_Caching_Cache_Insert_System_String_System_Object_) method, that adds a value into the cache, is suitable for most cases, it is often desirable to applay different settings for caching data based on the web application's settings stored in the Web.config file, and sometimes even completely disabling the cache for the entire application. In this case, the source code should not be changed and application should run without recompiling.
 
 ### Generic methods and default values
 
